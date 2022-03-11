@@ -1,0 +1,50 @@
+{
+  "name": "social-tracking-application",
+  "version": "1.0.0",
+  "description": "This application is meant for tracking users",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node app",
+    "devStart": "cross-env NODE_ENV=development nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdullah137/Node_Tracking_Application.git"
+  },
+  "keywords": [
+    "Tracking",
+    "Geolocation",
+    "Social",
+    "Media",
+    "Application"
+  ],
+  "author": "Abdullah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdullah137/Node_Tracking_Application/issues"
+  },
+  "homepage": "https://github.com/abdullah137/Node_Tracking_Application#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "express-session": "^1.17.2",
+    "method-override": "^3.0.0",
+    "moment": "^2.29.1",
+    "mongoose": "^6.2.4",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.7.2",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.15"
+  }
+}
