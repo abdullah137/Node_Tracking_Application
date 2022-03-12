@@ -2,27 +2,27 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('index');
+    res.render('frontend/index');
 });
 
 router.get('/about-us', (req, res) => {
-    res.render('about');
+    res.render('frontend/about');
 });
 
 router.get('/contact-us', (req, res) => {
-    res.render('contact');
+    res.render('frontend/contact');
 });
 
 router.get('/signin', (req, res) => {
-    res.render('login')
+    res.render('frontend/login')
 });
 
 router.get('/signup', (req, res) => {
-    res.render('signup');
+    res.render('frontend/signup');
 })
 
 router.get('/reset-password', (req, res) => {
-    res.render('reset-password');
+    res.render('frontend/reset-password');
 })
 
 module.exports = router;
