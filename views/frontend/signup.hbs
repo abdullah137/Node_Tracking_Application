@@ -24,7 +24,7 @@
         <!-- Main css -->
         <link href="css/style.css" rel="stylesheet" type="text/css" id="theme-opt" />
         <link href="css/colors/default.css" rel="stylesheet" id="color-opt">
-
+        
     </head>
 
     <body>
@@ -75,7 +75,7 @@
                                             <div class="form-group position-relative">
                                                 <label>Your username <span class="text-danger">*</span></label>
                                                 <i data-feather="book" class="fea icon-sm icons"></i>
-                                                <input type="text" class="form-control pl-5" placeholder="Username" name="username" >
+                                                <input type="text" class="form-control pl-5" placeholder="Username" name="userName" >
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -92,6 +92,15 @@
                                                 <input type="password" class="form-control pl-5" name="password" placeholder="Password" >
                                             </div>
                                         </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group position-relative">
+                                                <label>Confirm Password <span class="text-danger">*</span></label>
+                                                <i data-feather="key" class="fea icon-sm icons"></i>
+                                                <input type="password" class="form-control pl-5" name="password2" placeholder="Confirm Password" >
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
@@ -100,6 +109,9 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {{> frontend/messages}}
+
                                         <div class="col-md-12">
                                             <button class="btn btn-primary btn-block">Register</button>
                                         </div>
