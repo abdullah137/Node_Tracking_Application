@@ -1,23 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
+const { ensureAuthenticated, forwardAuthenticated }  = require("../middleware/auth");
+
 router.get('/dashboard', (req, res) => {
-    res.render('user/account-dashboard');
+    const user = req.user
+    res.render('user/account-dashboard', { user });
 })
 
-router.get('/chat', (req, res) => {
+router.get('/chat', ensureAuthenticated, (req, res) => {
     res.render('user/account-chat');
 })
 
-router.get('/friends', (req, res) => {
+router.get('/friends', ensureAuthenticated,(req, res) => {
     res.render('user/account-members');
 })
 
-router.get('/track', (req, res) => {
+router.get('/track', ensureAuthenticated, (req, res) => {
     res.render('user/account-track');
 })
 
-router.get('/profile', (req, res) => {
+router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('user/account-profile');
 })
 

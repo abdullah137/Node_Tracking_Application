@@ -2,10 +2,10 @@ const express = require('express');
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const passport = require("passport");
-const { ensureAuthenticated, forwardAuthenticated }  = require("../middleware/auth");
 
 // Loading Model
 const User  = require("../models/User");
+const Otp = require('../models/Otp');
 
 router.get('/', (req, res) => {
     res.render('frontend/index');
@@ -29,6 +29,83 @@ router.get('/signup', (req, res) => {
 
 router.get('/reset-password', (req, res) => {
     res.render('frontend/reset-password');
+});
+
+router.post('/reset-password', (req, res) => {
+    
+    // get user input
+    const email = req.body.email;
+    let errors = [];
+
+    // ensuring it is field
+    if(!email) {
+        errors.push({ msg: "Please Your Email is Required" });
+        res.render('frontend/reset-password', { errors, email });
+    }
+
+    // Check if it's a valid email
+    var emailRex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if(!email.match(emailRex)) {
+        errors.push({ msg: "Please Enter A Valid Email" });
+        res.render('frontend/reset-password', { email, errors })
+    }
+
+
+    // Check if the email exist
+    User.findOne({ email: email }).then(user => {
+        
+        if(!user) {
+            errors.push({ msg: "Sorry, Email Do Not Exists " })
+            res.render('frontend/reset-password', { email, errors })
+        }else {
+
+
+            // Function that generated strings
+            function generateUrl(length) {
+                var result           = '';
+                var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for ( var i = 0; i < length; i++ ) {
+                  result += characters.charAt(Math.floor(Math.random() * 
+             charactersLength));
+               }
+               return result;
+            }
+
+            let ranChar = generateUrl(10);
+
+            // Generate a random string
+            let url = req.url+'/change-password?'+ranChar;
+
+            let otp = Math.floor(Math.random()*90000) + 10000;
+
+            conso
+
+            const user_id  = req.user.id;
+
+            console.log(req.user);
+            // Inserting the otp code
+            // const OtpCode = new Otp({
+            //     user_id, otp, url
+            // });
+
+            // OtpCode.save().then(code => {
+
+            //     // logging
+            //     console.log('It has been saved')
+            // });
+
+
+            // Sending an Email With an Otp
+            console.log("Email Sent :maail");
+
+            // Inserting the 
+        }
+    });
+
+
+    // Then send an otp uisng an email
+
 });
 
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
