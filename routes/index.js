@@ -2,10 +2,17 @@ const express = require('express');
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const passport = require("passport");
+<<<<<<< HEAD
 
 // Loading Model
 const User  = require("../models/User");
 const Otp = require('../models/Otp');
+=======
+const { ensureAuthenticated, forwardAuthenticated }  = require("../middleware/auth");
+
+// Loading Model
+const User  = require("../models/User");
+>>>>>>> 4742f51affda7f4638661629ec91c40ef792f10b
 
 router.get('/', (req, res) => {
     res.render('frontend/index');
@@ -31,6 +38,7 @@ router.get('/reset-password', (req, res) => {
     res.render('frontend/reset-password');
 });
 
+<<<<<<< HEAD
 router.post('/reset-password', (req, res) => {
     
     // get user input
@@ -108,6 +116,8 @@ router.post('/reset-password', (req, res) => {
 
 });
 
+=======
+>>>>>>> 4742f51affda7f4638661629ec91c40ef792f10b
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
 
 
