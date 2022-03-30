@@ -7,8 +7,10 @@ const Users = require('../models/User');
 const { ensureAuthenticated, forwardAuthenticated }  = require("../middleware/auth");
 
 router.get('/dashboard', (req, res) => {
-    const user = req.user   
-    res.render('user/account-dashboard', { user });
+    const user = req.user
+    const userName = req.user.userName
+    const fullName = req.user.firstName+' '+req.user.lastName
+    res.render('user/account-dashboard', { user, userName, fullName });
 })
 
 router.get('/chat/:id', ensureAuthenticated, (req, res) => {
