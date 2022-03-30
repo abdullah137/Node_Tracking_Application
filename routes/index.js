@@ -121,7 +121,6 @@ router.post('/signup', (req, res) => {
         email, 
         userName,
         password,
-        password2,
        dob,
        phone,
         terms
@@ -134,14 +133,9 @@ router.post('/signup', (req, res) => {
        errors.push({ msg: "Please Enter 🙏 Fill Fields" });
     }
 
-    if(!terms) {
-        errors.push({ msg: " Sorry, Kindly Accept Our Terms and Conditons " })
-    }
-
-   // checking to see if the passwords match
-   if(password != password2) {
-        errors.push({ msg: "Password do not Match" });
-   }
+    // if(!terms) {
+    //     errors.push({ msg: " Sorry, Kindly Accept Our Terms and Conditons " })
+    // }
 
    // Ensuring that user password is more than 6 characters
    if(password.length < 6) {
@@ -161,7 +155,7 @@ router.post('/signup', (req, res) => {
 
           // Setting the user object to be updated
         const newUser = new User({
-            userName, firstName, lastName, phone, email, password
+            userName, firstName, lastName, phone, email, password, dob
         });
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -170,7 +164,6 @@ router.post('/signup', (req, res) => {
                 newUser.password = hash;
                 newUser.save()
                 .then(user => {
-
 
                     // then create an email function to ther user
 
