@@ -172,12 +172,21 @@
 	}
 	
 	var handleChatbox = function() {
+<<<<<<< HEAD
 		jQuery('.bell-link').on('click',function(){
 			jQuery('.chatbox').addClass('active');
 		});
 		jQuery('.chatbox-close').on('click',function(){
 			jQuery('.chatbox').removeClass('active');
 		});
+=======
+		// jQuery('.bell-link').on('click',function(){
+		// 	jQuery('.chatbox').addClass('active');
+		// });
+		// jQuery('.chatbox-close').on('click',function(){
+		// 	jQuery('.chatbox').removeClass('active');
+		// });
+>>>>>>> main
 	}
 	
 	var handlePerfectScrollbar = function() {
