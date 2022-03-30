@@ -51,7 +51,7 @@
                             <img src="images/user/signup.svg" class="img-fluid d-block mx-auto" alt="">
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-6">
+                    <div style="margin-top: 250px;" class="col-lg-5 col-md-6">
                         <div class="card login_page shadow rounded border-0">
                             <div class="card-body">
                                 <h4 class="card-title text-center">Signup</h4>  
@@ -71,6 +71,21 @@
                                                 <input type="text" class="form-control pl-5" placeholder="Last Name" name="lastName" >
                                             </div>
                                         </div>
+                                         <div class="col-md-6">
+                                            <div class="form-group position-relative">                                               
+                                                <label>Phone <span class="text-danger">*</span></label>
+                                                <i data-feather="phone" class="fea icon-sm icons"></i>
+                                                <input type="text" class="form-control pl-5" placeholder="Phone" name="phone" >
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group position-relative">                                                
+                                                <label>Date Of Birth<span class="text-danger">*</span></label>
+                                                <i data-feather="calendar" class="fea icon-sm icons"></i>
+                                                <input type="date" class="form-control pl-5" placeholder="Dob" name="dob" >
+                                            </div>
+                                        </div>
                                           <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Your username <span class="text-danger">*</span></label>
@@ -78,6 +93,7 @@
                                                 <input type="text" class="form-control pl-5" placeholder="Username" name="userName" >
                                             </div>
                                         </div>
+
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Your Email <span class="text-danger">*</span></label>
@@ -94,17 +110,9 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-group position-relative">
-                                                <label>Confirm Password <span class="text-danger">*</span></label>
-                                                <i data-feather="key" class="fea icon-sm icons"></i>
-                                                <input type="password" class="form-control pl-5" name="password2" placeholder="Confirm Password" >
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <input type="checkbox" value="1"  class="custom-control-input" name="terms">
                                                     <label class="custom-control-label" for="customCheck1">I Accept <a href="#" class="text-primary">Terms And Condition</a></label>
                                                 </div>
                                             </div>

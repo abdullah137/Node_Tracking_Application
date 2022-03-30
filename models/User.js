@@ -25,17 +25,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    dob: {
+        type: String,
+        required: true,
+    },
     profileIntro: {
         type: String,
         default: ''
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
     },
     createdAt: {
         type: Date,

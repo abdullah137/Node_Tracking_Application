@@ -14,7 +14,6 @@ module.exports = function (passport) {
                 email: email
             }).then(user => {
 
-                console.log("it is here now");
 
                 if(!user) {
                     return done(null, false, { message: "That email is not registered" })

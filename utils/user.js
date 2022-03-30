@@ -1,8 +1,8 @@
 const users = [];
 
 // Join user to chat
-function userOnline(id, username) {
-    const user = { id, username };
+function userOnline(id, client_id, session_id) {
+    const user = { id, client_id, session_id };
 
     users.push(user);
 
@@ -31,5 +31,6 @@ function getRoomUsers(room) {
 module.exports = {
     userOffline,
     getRoomUsers,
-    userOnline
+    userOnline,
+    getCurrentUser
 }

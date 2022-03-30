@@ -112,16 +112,30 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] 
 
 
 router.post('/signup', (req, res) => {
-
-   // getting the user inputs using post requst 
-   const { firstName, lastName, email, userName, password, password2 } = req.body;
+    
+   console.log(req.body)
+   // getting the user inputs using post request 
+   const { 
+        firstName,
+        lastName, 
+        email, 
+        userName,
+        password,
+        password2,
+       dob,
+       phone,
+        terms
+    } = req.body;
    let errors = []; 
 
-   console.log(req.body)
 
    // ensuring all users field is field
-   if(!firstName || !lastName || !email || !password || !userName ) {
+   if(!firstName || !lastName || !email || !password || !userName || !dob || !phone ) {
        errors.push({ msg: "Please Enter 🙏 Fill Fields" });
+    }
+
+    if(!terms) {
+        errors.push({ msg: " Sorry, Kindly Accept Our Terms and Conditons " })
     }
 
    // checking to see if the passwords match
@@ -135,19 +149,19 @@ router.post('/signup', (req, res) => {
    }
 
    if(errors.length > 0 ) {
-       res.render('frontend/signup', { errors, firstName, lastName, email, userName,password,password2 });
+       res.render('frontend/signup', { errors, firstName, lastName, email, userName, dob, phone, terms });
    }else {
         
     // Find if the user exits
     User.findOne({ $or: [ { email: email }, { userName: userName }  ] }).then(user => {
       if(user) {
           errors.push({ msg: "Email Or Username Already Exist" });
-          res.render('frontend/signup', { errors, firstName, lastName, email, userName, password });
+          res.render('frontend/signup', { errors, firstName, lastName, email, userName, password, dob, phone, terms });
       } else {
 
           // Setting the user object to be updated
         const newUser = new User({
-            firstName, lastName, userName, email, password
+            userName, firstName, lastName, phone, email, password
         });
 
         bcrypt.genSalt(10, (err, salt) => {
