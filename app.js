@@ -41,11 +41,11 @@ if(process.env.NODE_ENV == "development") {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
-const { json, ifequals } = require('./helpers/hbs');
+const { json, ifEquals, checkList } = require('./helpers/hbs');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
-     helpers: { json, ifequals },
+     helpers: { json, ifEquals, checkList },
      extname:'.hbs',
      defaultLayout: false
 }));
