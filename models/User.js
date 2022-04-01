@@ -33,6 +33,23 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    friends: [
+        {
+            awaitList: {
+                type: Array
+            },
+            acceptList: {
+                type: Array
+            },
+            declineList: {
+                type: Array
+            }
+        }
+    ],
+    frdList: {
+        type: Array,
+        required: false
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -41,7 +58,10 @@ const UserSchema = new mongoose.Schema({
     lastLogin: {
         type: Date,
         default: Date.now
- }
+     }
+
+
+
 });
 
 module.exports = mongoose.model('User', UserSchema);
