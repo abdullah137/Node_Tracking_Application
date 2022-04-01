@@ -55,7 +55,87 @@
             <!-- row -->
 			<div class="container-fluid">
                 <div class="row">
-                    
+
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Send Friend Request Here</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <form class="form-valide-with-icon needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label class="text-label form-label" for="validationCustomUsername">Username</label>
+                                            <div class="input-group">
+												<span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                                <input type="text" class="form-control" id="validationCustomUsername" placeholder="Enter a username.." required>
+												<div class="invalid-feedback">
+													Please Enter a username.
+												  </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-block me-2 btn-primary">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">List of Friends</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                     {{> user/messages}}
+                                     
+                                    <table class="table table-responsive-md">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:50px;">
+													<div class="custom-control custom-checkbox checkbox-success check-lg me-3">
+														<input type="checkbox" class="custom-control-input" id="checkAll" required="">
+														<label class="custom-control-label" for="checkAll"></label>
+													</div>
+												</th>
+                                                <th><strong>Name</strong></th>
+                                                <th><strong>Email</strong></th>
+                                                <th><strong>Username</strong></th>
+                                                <th><strong>Status</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#if friends}}
+							                	{{#each friends}}
+                                            <tr>
+                                                <td>
+													<div class="custom-control custom-checkbox checkbox-success check-lg me-3">
+														<input type="checkbox" class="custom-control-input" id="customCheckBox2" required="">
+														<label class="custom-control-label" for="customCheckBox2"></label>
+													</div>
+												</td>
+                                                <td><div class="d-flex align-items-center"><img src="../../admin/images/avatar/1.jpg" class="rounded-lg me-2" width="24" alt=""/> <span class="w-space-no">{{{firstName}}} {{lastName}}</span></div></td>
+                                                <td><a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="fe9b869f938e929bbe9b869f938e929bd09d9193">[email&#160;protected]</a>	</td>
+                                                <td>{{{userName}}}</td>
+                                                <td><div class="d-flex align-items-center">
+                                                {{{checkList frdList ../userId }}}
+                                                  </div></td>
+                                                <td>
+													<div class="d-flex">
+														<a href="friend-request/{{_id}}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>
+													</div>
+												</td>
+                                            </tr>
+                                            	{{/each}}
+					                    {{/if}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 				 </div>
             </div>
         </div>
