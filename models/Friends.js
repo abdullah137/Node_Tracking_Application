@@ -14,8 +14,8 @@ const FriendSchema = new mongoose.Schema({
     },
     frd_status: {
         type: String,
-        default: '0',
-        enum: ['0', '1']
+        default: 0,
+        enum: [0, 1]
     },
     createdAt: {
         type: Date,
