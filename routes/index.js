@@ -79,8 +79,6 @@ router.post('/reset-password', (req, res) => {
 
             let otp = Math.floor(Math.random()*90000) + 10000;
 
-            conso
-
             const user_id  = req.user.id;
 
             console.log(req.user);
