@@ -46,10 +46,6 @@ const UserSchema = new mongoose.Schema({
             }
         }
     ],
-    frdList: {
-        type: Array,
-        required: false
-    },
     createdAt: {
         type: Date,
         default: Date.now
