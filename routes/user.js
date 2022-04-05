@@ -23,10 +23,10 @@ router.get('/friends', async (req, res) => {
     const userId = req.user.id
 
     // getting the list of friends
-    const friends = await Users.find({ userName: { $ne: userName } }).lean();
+    const users = await Users.find({ userName: { $ne: userName } }).lean();
 
    // console.log(friends)
-    res.render('user/account-search-friends', { userName, friends, userId });
+    res.render('user/account-search-friends', { userName, users, userId });
 })
 
 router.get('/friend-cancel/:id', async (req, res) => {
@@ -158,7 +158,7 @@ router.get('/friend-request/:id', async (req, res) => {
 
     if(!sessionCheck) {
         // render the person the home page
-        res.sendStatus(500).render('/error/502');
+        res.sendStatus(502).render('/error/502');
     }
 
     // Inserting the records on the chat request
@@ -169,16 +169,13 @@ router.get('/friend-request/:id', async (req, res) => {
         res.render('/error/500')
 
     } else {
-    
-    // Check if the user is already in users list
-    const frdCheckList = await Users.find({ _id: loggedUser, frdList: { $in: [ req.params.id ] } });
         
     // Updates the list of friends
     const updateFrdList =  await Users.findByIdAndUpdate(
         req.params.id,
         {
-          $push: {
-                frdList: loggedUser
+          $set: {
+                "friends.awaitList": loggedUser
             }
         },
         { new: true});
