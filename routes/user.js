@@ -11,6 +11,7 @@ const { ensureAuthenticated, forwardAuthenticated }  = require("../middleware/au
 
 router.get('/dashboard', (req, res) => {
     const user = req.user
+    console.log(user)
     const userName = req.user.userName
     const fullName = req.user.firstName+' '+req.user.lastName
     res.render('user/account-dashboard', { user, userName, fullName });
@@ -25,11 +26,94 @@ router.get('/friends', async (req, res) => {
     // getting the list of friends
     const users = await Users.find({ userName: { $ne: userName } }).lean();
 
+    console.log(users)
+
    // console.log(friends)
     res.render('user/account-search-friends', { userName, users, userId });
 })
 
-router.get('/friend-cancel/:id', async (req, res) => {
+router.get('/friend-request/:id', async (req, res) => {
+    
+    const loggedUser = req.user.id
+    const targetId = req.params.id
+
+    req.body.source_id = loggedUser
+    req.body.target_id = targetId
+
+     // check if the param is empty
+     if(!targetId) {
+        // render them to the page 404
+        res.sendStatus(404).render('/error/404')
+    }
+    
+    try {
+
+    // check if the user exist
+    const userCheck = await Users.findById(targetId).exec();
+
+    // check if the session user is active
+    const sessionCheck = await Users.findById(loggedUser).exec();
+
+    if(!userCheck) {
+        // render the person the home 500 page
+        res.sendStatus(502).render('/error/502');   
+    }
+
+    if(!sessionCheck) {
+        // render the person the home page
+        res.sendStatus(502).render('/error/502');
+    }
+
+    // Inserting the records on the chat request
+    const insertFriends = await Friends.create(req.body);
+
+    if(!insertFriends) {
+        // render the person home
+        res.render('/error/500')
+
+    } else {
+
+    // Updates the list of friends
+    const updateFrdList =  await Users.updateOne(
+        { _id: req.params.id},
+        {
+          $push: {
+                "friends.0.awaitList": loggedUser
+            }
+        });
+    
+    // Initializing the vairables
+    const senderId = new mongoose.Types.ObjectId(loggedUser);
+    const targetId = new mongoose.Types.ObjectId(req.params.id);
+
+    
+    const saveNotification = await Notifications.create({ 
+        senderId: senderId,
+        targetId: targetId,
+        type: 'frd_add'
+    });
+
+    // if it's there then remend them that the friend request is already sent,
+    // then insert into the notification table
+    
+    
+    //else then add them to the friend array
+    // then them to the user array
+
+    // Insert into the database
+    req.flash("friend_msg_success", "Your friend request has been sent successfully");
+    res.redirect(`/user/friends`)
+
+    } 
+        
+    } catch (error) {
+        console.log(error);
+        res.redirect('/error/500');    
+    }
+
+});
+
+router.get('/friend-accept/:id', async (req, res) => {
   
     // declaring the needed variables
     const sessionId = req.user.id
@@ -128,88 +212,6 @@ router.get('/friend-decline/:id', async (req, res) => {
     }
 
 })
-
-router.get('/friend-request/:id', async (req, res) => {
-    
-    const loggedUser = req.user.id
-    const targetId = req.params.id
-
-    req.body.source_id = loggedUser
-    req.body.target_id = targetId
-
-     // check if the param is empty
-     if(!targetId) {
-        // render them to the page 404
-        res.sendStatus(404).render('/error/404')
-    }
-    
-    try {
-
-    // check if the user exist
-    const userCheck = await Users.findById(targetId).exec();
-
-    // check if the session user is active
-    const sessionCheck = await Users.findById(loggedUser).exec();
-
-    if(!userCheck) {
-        // render the person the home 500 page
-        res.sendStatus(502).render('/error/502');   
-    }
-
-    if(!sessionCheck) {
-        // render the person the home page
-        res.sendStatus(502).render('/error/502');
-    }
-
-    // Inserting the records on the chat request
-    const insertFriends = await Friends.create(req.body);
-
-    if(!insertFriends) {
-        // render the person home
-        res.render('/error/500')
-
-    } else {
-        
-    // Updates the list of friends
-    const updateFrdList =  await Users.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: {
-                "friends.awaitList": loggedUser
-            }
-        },
-        { new: true});
-    
-    // Initializing the vairables
-    const senderId = new mongoose.Types.ObjectId(loggedUser);
-    const targetId = new mongoose.Types.ObjectId(req.params.id);
-
-    
-    const saveNotification = await Notifications.create({ 
-        senderId: senderId,
-        targetId: targetId,
-        type: 'frd_add'
-    });
-
-    // if it's there then remend them that the friend request is already sent,
-    // then insert into the notification table
-    
-    
-    //else then add them to the friend array
-    // then them to the user array
-
-    // Insert into the database
-    req.flash("friend_msg_success", "Your friend request has been sent successfully");
-    res.redirect(`/user/friends`)
-
-    } 
-        
-    } catch (error) {
-        console.log(error);
-        res.redirect('/error/500');    
-    }
-
-});
 
 router.get('/chat/:id', ensureAuthenticated, (req, res) => {
     const user_id = req.params.id
