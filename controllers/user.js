@@ -161,10 +161,21 @@ const friendAccept = async (req, res) => {
             const saveNotification = await Notifications.create( { 
                 senderId: new mongoose.Types.ObjectId(sessionId),
                 targetId: new mongoose.Types.ObjectId(req.params.id),
-                type: 'frd_reject'
+                type: 'frd_accept'
             });
+        
+        // Update the friends status
+        const updateFriendStatus = await Friends.updateOne( 
+            { $or: [ { source_id: sessionId, target_id: targetId },
+                 { source_id: targetId, target_id: sessionId } ] },
+                 {
+                    $set: {
+                        frd_status: "1"
+                    }
+                 }
+         );
 
-
+        console.log(updateFriendStatus)
 
         if(!acceptFriendRequest || !acceptFriendRequestReceiver || !saveNotification) {
             // rendering them to 500
@@ -219,6 +230,9 @@ const friendDecline = async (req, res) => {
             {
                 $pull: {
                     "friends.0.awaitList": sessionId
+                },
+                $push: {
+                    "friends.0.declineList": sessionId
                 }
             }
         );
@@ -228,9 +242,23 @@ const friendDecline = async (req, res) => {
             { _id: sessionId }, {
                 $pull: {
                     "friends.0.awaitList": req.params.id
+                },
+                $push: {
+                    "friends.0.declineList": req.params.id
                 }
             }
         );
+
+          // Update the friends status
+          const updateFriendStatus = await Friends.updateOne( 
+            { $or: [ { source_id: sessionId, target_id: targetId },
+                 { source_id: targetId, target_id: sessionId } ] },
+                 {
+                    $set: {
+                        frd_status: "0"
+                    }
+                 }
+         );
 
         // saving the notifications
         const saveNotification = await Notifications.create( { 
@@ -240,7 +268,7 @@ const friendDecline = async (req, res) => {
         });
 
 
-        if(!deleteFriendRequest || !deleteFriendRequestReceiver || !saveNotification) {
+        if(!deleteFriendRequest || !deleteFriendRequestReceiver || !saveNotification || !updateFriendStatus) {
             // rendering them to 500
             res.sendStatus(500).render('/error/500');
         }else {

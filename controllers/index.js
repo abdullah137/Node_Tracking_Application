@@ -185,6 +185,17 @@ const logoutFunction = (req, res) => {
 
 const googleOauth = passport.authenticate('google', { scope: ['profile'] });
 
+const googleCallbackFunction = (req, res) => {
+  
+   // Inserted Sucessfully
+   res.status(200).json({
+       message: "Account Created Successfully",
+       status: true,
+       admin: req.admin
+   })
+   return;
+}
+
 module.exports = {
     homePage,
     aboutPage,
@@ -194,6 +205,7 @@ module.exports = {
     resetPasswordPage,
     resetPasswordFunction,
     googleOauth,
+    googleCallbackFunction,
     signupPage,
     signupFunction,
     logoutFunction
