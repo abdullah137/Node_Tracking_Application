@@ -106,8 +106,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{#if friends}}
-							                	{{#each friends}}
+                                            {{#if users}}
+							                	{{#each users}}
                                             <tr>
                                                 <td>
 													<div class="custom-control custom-checkbox checkbox-success check-lg me-3">
@@ -119,11 +119,12 @@
                                                 <td><a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="fe9b869f938e929bbe9b869f938e929bd09d9193">[email&#160;protected]</a>	</td>
                                                 <td>{{{userName}}}</td>
                                                 <td><div class="d-flex align-items-center">
-                                                {{{checkList frdList ../userId }}}
+                                                {{{statusList friends.0.awaitList friends.0.acceptList friends.0.declineList ../userId }}}
+                                                
                                                   </div></td>
                                                 <td>
 													<div class="d-flex">
-														<a href="friend-request/{{_id}}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>
+														{{{statusIcon friends.0.awaitList friends.0.acceptList friends.0.declineList ../userId  _id }}}
 													</div>
 												</td>
                                             </tr>

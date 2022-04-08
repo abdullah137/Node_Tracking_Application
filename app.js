@@ -41,11 +41,11 @@ if(process.env.NODE_ENV == "development") {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
-const { json, ifEquals, checkList } = require('./helpers/hbs');
+const { json, ifEquals, statusList, statusIcon } = require('./helpers/hbs');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
-     helpers: { json, ifEquals, checkList },
+     helpers: { json, ifEquals, statusList, statusIcon },
      extname:'.hbs',
      defaultLayout: false
 }));
@@ -64,6 +64,12 @@ app.use(
 
 // Passport Configuration
 require('./config/passport')(passport);
+
+// Passport Google Configuration
+require('./config/oauth_google')(passport);
+
+// Passport Facebook Configuration
+require('./config/oauth_facebook')(passport);
 
 // Initializing passport middelware
 app.use(passport.initialize());
@@ -85,6 +91,8 @@ app.use(function(req, res, next) {
     res.locals.error_msg = req.flash("error_msg");
     res.locals.success_msg = req.flash("success_msg");
     res.locals.error = req.flash("error");
+    res.locals.friend_msg_success = req.flash("friend_msg_success");
+    res.locals.friend_msg_decline = req.flash("friend_msg_decline");
     next();
 });
 
