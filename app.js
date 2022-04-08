@@ -65,6 +65,12 @@ app.use(
 // Passport Configuration
 require('./config/passport')(passport);
 
+// Passport Google Configuration
+require('./config/oauth_google')(passport);
+
+// Passport Facebook Configuration
+require('./config/oauth_facebook')(passport);
+
 // Initializing passport middelware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -86,6 +92,7 @@ app.use(function(req, res, next) {
     res.locals.success_msg = req.flash("success_msg");
     res.locals.error = req.flash("error");
     res.locals.friend_msg_success = req.flash("friend_msg_success");
+    res.locals.friend_msg_decline = req.flash("friend_msg_decline");
     next();
 });
 
