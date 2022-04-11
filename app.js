@@ -9,7 +9,7 @@ const http = require('http');
 const socketio = require('socket.io');
 const MongoStore = require("connect-mongo");
 const {engine} = require('express-handlebars');
-
+const methodOverride = require('method-override');
 
 const {formatMessage, object_With_resume} = require('./utils/messages');
 const { userOnline, getCurrentUser, userOffline, getRoomUsers } = require('./utils/user');
@@ -32,6 +32,16 @@ connectDB();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// Method Overridemiddleware
+app.use(methodOverride(function(req, res) {
+    if(req.body && typeof req.body === 'object' && '_method' in req.body ) {
+        // look in urlencoded POST bodies and delete it
+        var method = req.body._method;
+        delete req.body._method;
+        return method;
+    }
+}));
+
 // Setting Up Morgan
 if(process.env.NODE_ENV == "development") {
   //  app.use(morgan('dev'));
@@ -42,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
 const { json, ifEquals, statusList, statusIcon } = require('./helpers/hbs');
+const { type } = require('os');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
