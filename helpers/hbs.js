@@ -35,5 +35,14 @@ module.exports = {
             return `<a href="friend-request/${id}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>`
         }
 
+    },
+
+    // Helpers for profile image
+    profile: function( userImage ) {
+        if(userImage === "" || userImage === undefined) {
+            return `../admin/images/avatar-2.PNG`
+        }else {
+            return  `../uploads/${userImage}`;
+        }
     }
 }
