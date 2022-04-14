@@ -47,7 +47,7 @@
         <!--**********************************
             Sidebar end
         ***********************************-->
-		
+		{{> user/svg}}
 		<!--**********************************
             Content body start
         ***********************************-->
@@ -70,16 +70,16 @@
                                 </div>
                                 <div class="profile-info">
 									<div class="profile-photo">
-										<img src="../../admin/images/profile/profile.png" class="img-fluid rounded-circle" alt="">
+										<img src="{{{ profile image }}}" class="img-fluid rounded-circle" alt="">
 									</div>
 									<div class="profile-details">
 										<div class="profile-name px-3 pt-2">
-											<h4 class="text-primary mb-0">Mitchell C. Shay</h4>
-											<p>UX / UI Designer</p>
+											<h4 class="text-primary mb-0">{{firstName}} {{lastName}} </h4>
+											<p>{{userName}}</p>
 										</div>
 										<div class="profile-email px-2 pt-2">
 											<h4 class="text-muted mb-0"><a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="f39a9d959cb3968b929e839f96dd909c9e">[email&#160;protected]</a></h4>
-											<p>Email</p>
+											<p>{{email}}</p>
 										</div>
 										<div class="dropdown ms-auto">
 											<a href="#" class="btn btn-primary light sharp" data-bs-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></a>
@@ -105,19 +105,32 @@
 										<div class="profile-statistics">
 											<div class="text-center">
 												<div class="row">
-                                                    <form method="POST" enctype="multipart/form-data">
+                                                    <form method="POST" action="image" enctype="multipart/form-data">
 													<div class="input-group mb-3">
 														<span class="input-group-text">Upload</span>
 															<div class="form-file">
-																<input type="file" class="form-file-input form-control">
+																<input type="file" name="upload" class="form-file-input form-control">
 															</div>
 														</div>
+
+                                                        <div class="mt-4">
+                                                            <button class="btn btn-primary mb-1" > <i class="fas fa-image"></i> Upload Image</button>
+                                                        </div>
+
                                                     </form>
 												</div>
-												<div class="mt-4">
-													<a href="javascript:void(0);" class="btn btn-primary mb-1" > <i class="fas fa-image"></i> Upload Image</a>
-												</div>
 											</div>
+                                            
+                                                {{#if success_msg}}
+                                                    <div class="mx-auto">
+                                                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                                                    <div>
+                                                        &nbsp;&nbsp;{{success_msg}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    {{/if}}
 										</div>
 									</div>
 								</div>
@@ -139,43 +152,54 @@
                                                 <div class="pt-3">
                                                     <div class="settings-form">
                                                         <h4 class="text-primary">Set your profile</h4> <br />
-                                                        <form>
+                                                        {{> user/messages}}
+                                                        {{#if profile}}
+                                                        <form action="update-profile" method="POST">
+                                                            <input type="hidden" name="_method" value="PUT">
                                                             <div class="row">
                                                                 <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">First Name</label>
-                                                                    <input type="text" placeholder="First Name" class="form-control">
+                                                                    <label class="form-label">First Name*</label>
+                                                                    <input type="text" placeholder="First Name" name="firstName" value="{{firstName}}" class="form-control">
                                                                 </div>
                                                                 <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">Last Name</label>
-                                                                    <input type="text" placeholder="Last Name" class="form-control">
+                                                                    <label class="form-label">Last Name*</label>
+                                                                    <input type="text" placeholder="Last Name" name="lastName" value="{{lastName}}" class="form-control">
                                                                 </div>
                                                                  <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">Phone</label>
-                                                                    <input type="text" placeholder="Phone" class="form-control">
+                                                                    <label class="form-label">Phone*</label>
+                                                                    <input type="text" placeholder="Phone" name="phone" value="{{phone}}" class="form-control">
                                                                 </div>
                                                                 <div class="mb-3 col-md-6">
-                                                                    <label class="form-label">Date of Birth</label>
-                                                                    <input type="date" class="form-control">
+                                                                    <label class="form-label">Date of Birth*</label>
+                                                                    <input type="date" value="{{dob}}" name="dob" class="form-control">
                                                                 </div>
                                                             <div class="mb-3">
                                                                 <label class="form-label">Username</label>
-                                                                <input type="text" placeholder="Abdullah137" style="background-color: #E9ECEF; color: #93757D;" class="form-control" readonly disabled>
+                                                                <input type="text" value="{{userName}}" style="background-color: #E9ECEF; color: #93757D;" class="form-control" readonly disabled>
                                                             </div>
                                                             
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Email*</label>
+                                                                <input type="text" name="email" value="{{email}}" class="form-control" >
+                                                            </div>
+
                                                             <div class="row">
                                                                
                                                             <div class="mb-3 col-md-6">
                                                                 <label class="form-label">Password</label>
-                                                                <input type="password" placeholder="Enter Password" class="form-control">
+                                                                <input type="password" placeholder="Enter Password" name="password" class="form-control">
                                                             </div>
                                                              <div class="mb-3 col-md-6">
                                                                     <label class="form-label">Confirm Password</label>
-                                                                    <input type="password" placeholder="Confirm Your Password" class="form-control">
+                                                                    <input type="password" placeholder="Confirm Your Password" name="c_password" class="form-control">
                                                                 </div>
                                                             </div>
+                                                            <small><b>Kindly Leave the Password Blank,</b> If you intend not to change the it.</small>
+                                                            <br />
                                                             <button class="btn btn-primary" type="submit"> <i class="fa fa-user-circle-o"></i> Update Profile
                                                             </button>
                                                         </form>
+                                                        {{/if}}
                                                     </div>
                                                 </div>
                                             </div>
