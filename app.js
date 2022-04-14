@@ -51,12 +51,12 @@ if(process.env.NODE_ENV == "development") {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
-const { json, ifEquals, statusList, statusIcon, icon, profile } = require('./helpers/hbs');
+const { json, ifEquals, statusList, statusIcon, profile } = require('./helpers/hbs');
 const { type } = require('os');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
-     helpers: { json, ifEquals, statusList, statusIcon, icon, profile },
+     helpers: { json, ifEquals, statusList, statusIcon, profile },
      extname:'.hbs',
      defaultLayout: false
 }));
