@@ -102,7 +102,6 @@ const resetPasswordFunction = (req, res) => {
 
 const signupFunction = (req, res) => {
     
-    console.log(req.body)
     // getting the user inputs using post request 
     const { 
          firstName,

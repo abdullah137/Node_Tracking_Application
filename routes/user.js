@@ -14,7 +14,9 @@ const {
     messageFunction,
     allFriends,
     trackFriends,
-    userProfile
+    userProfile,
+    updateProfile,
+    profileImg
  } = require('../controllers/user')
 
 router.get('/dashboard', dashboard)
@@ -36,5 +38,9 @@ router.get('/friends', ensureAuthenticated, allFriends)
 router.get('/track', ensureAuthenticated, trackFriends)  
 
 router.get('/profile', ensureAuthenticated, userProfile)
+
+router.put('/update-profile', ensureAuthenticated, updateProfile);
+
+router.post('/image', ensureAuthenticated, profileImg);
 
 module.exports = router;
