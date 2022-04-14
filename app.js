@@ -51,12 +51,12 @@ if(process.env.NODE_ENV == "development") {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
-const { json, ifEquals, statusList, statusIcon } = require('./helpers/hbs');
+const { json, ifEquals, statusList, statusIcon, icon, profile } = require('./helpers/hbs');
 const { type } = require('os');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
-     helpers: { json, ifEquals, statusList, statusIcon },
+     helpers: { json, ifEquals, statusList, statusIcon, icon, profile },
      extname:'.hbs',
      defaultLayout: false
 }));
@@ -104,6 +104,7 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     res.locals.friend_msg_success = req.flash("friend_msg_success");
     res.locals.friend_msg_decline = req.flash("friend_msg_decline");
+    res.locals.update_info = req.flash("update_info");
     next();
 });
 
