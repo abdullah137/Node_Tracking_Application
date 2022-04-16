@@ -24,15 +24,15 @@ module.exports = {
 
         if(awaitList.indexOf(userId) >= 0 ) {
             return `
-            <a href="friend-decline/${id}" class="btn btn-danger shadow btn-xs sharp me-1"><i class="fas fa-times"></i></a>
-            <a href="friend-accept/${id}" class="btn btn-success shadow btn-xs sharp me-1"><i class="fas fa-check"></i></a>
+            <a href="friends/decline/${id}" class="btn btn-danger shadow btn-xs sharp me-1"><i class="fas fa-times"></i></a>
+            <a href="friends/accept/${id}" class="btn btn-success shadow btn-xs sharp me-1"><i class="fas fa-check"></i></a>
             `
         }else if(acceptList.indexOf(userId) >= 0) {
-            return `<a href="friend-remove/${id}" class="btn btn-warning shadow btn-xs sharp me-1"><i class="fas fa-trash"></i></a>`
+            return `<a href="friends/remove/${id}" class="btn btn-warning shadow btn-xs sharp me-1"><i class="fas fa-trash"></i></a>`
         }else if(declineList.indexOf(userId) >= 0) {
-            return `<a href="friend-request/${id}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>`
+            return `<a href="friends/request/${id}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>`
         }else {
-            return `<a href="friend-request/${id}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>`
+            return `<a href="friends/request/${id}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-user"></i></a>`
         }
 
     },

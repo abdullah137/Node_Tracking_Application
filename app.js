@@ -82,6 +82,9 @@ require('./config/oauth_google')(passport);
 // Passport Facebook Configuration
 require('./config/oauth_facebook')(passport);
 
+// Passport Github Configuration
+require('./config/oauth_github')(passport);
+
 // Initializing passport middelware
 app.use(passport.initialize());
 app.use(passport.session());
@@ -109,9 +112,16 @@ app.use(function(req, res, next) {
 });
 
 // Setting the routes 
-app.use('/', require('./routes/index'));
-app.use('/user', require('./routes/user.js'));
+app.use('/', require('./routes/frontpage/index'));
+app.use('/users', require('./routes/user/user.js'));
+app.use('/users/auth', require('./routes/oauth/index'));
+app.use('/users/friends', require('./routes/friends/index'));
 
+
+// routing the user to all pagee
+app.all('*', (req, res) => {
+    res.status(404).render('errors/error');
+});
 
 // socket io is here
 io.on('connection', socket => {
