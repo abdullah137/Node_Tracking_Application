@@ -44,7 +44,7 @@ app.use(methodOverride(function(req, res) {
 
 // Setting Up Morgan
 if(process.env.NODE_ENV == "development") {
-  //  app.use(morgan('dev'));
+    // app.use(morgan('dev'));
 }
 
 // Setting static folder
@@ -116,7 +116,7 @@ app.use('/', require('./routes/frontpage/index'));
 app.use('/users', require('./routes/user/user.js'));
 app.use('/users/auth', require('./routes/oauth/index'));
 app.use('/users/friends', require('./routes/friends/index'));
-
+app.use('/users/groups', require('./routes/groups/index'));
 
 // routing the user to all pagee
 app.all('*', (req, res) => {
