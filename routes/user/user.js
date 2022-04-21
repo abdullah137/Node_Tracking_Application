@@ -13,7 +13,9 @@ const {
     dashboard,
     friends,
     profile, 
-    updateProfile, profileImage} = require('../../controllers/user/user'); 
+    updateProfile,
+    profileImage
+} = require('../../controllers/user/user'); 
 
 const { ensureAuthenticated, forwardAuthenticated }  = require("../../middleware/auth");
 
