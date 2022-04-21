@@ -63,14 +63,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form class="form-valide-with-icon needs-validation" novalidate>
+                                    <form method="POST" action="friends" class="form-valide-with-icon needs-validation" novalidate>
                                         <div class="mb-3">
                                             <label class="text-label form-label" for="validationCustomUsername">Username</label>
                                             <div class="input-group">
 												<span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                                                <input type="text" class="form-control" id="validationCustomUsername" placeholder="Enter a username.." required>
+                                                <input name="terms" type="text" class="form-control" id="validationCustomUsername" placeholder="Enter a username.." required>
 												<div class="invalid-feedback">
-													Please Enter a username.
+													Please Enter a username or name.
 												  </div>
                                             </div>
                                         </div>
