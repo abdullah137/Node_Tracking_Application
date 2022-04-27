@@ -279,4 +279,31 @@ const accept = async(req, res) => {
 
 }
 
-module.exports = { friends, accept, requests, decline }
+const search = async(req, res) => {
+    
+    // check if the user is logged in
+
+    // check if the user log in is validated
+
+    // get the body from input
+    const { terms } = req.body;
+  
+    // check if the input is empty
+    if(!terms) {
+        req.flash("friend_msg_decline", "Oops!!! the search filed should not be empty 😓");
+        res.redirect(`/users/friends`)
+        return;
+    }
+
+    // check if the search user exist
+    const users = await Users.find({ $or: [ { "userName": /abdul/ }, { "firstName": /abdullah/ }, { "lastName": /no/ }  ] }).lean();
+
+    const userName = req.user.userName
+    const userId = req.user.id
+    const image = req.user.profileImg;
+
+    const success = { msg: "Your Result is here" };
+    res.render('user/account-search-friends', {image, userName, users, userId, success});
+}
+
+module.exports = { friends, accept, requests, decline, search }
