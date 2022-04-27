@@ -117,6 +117,7 @@ app.use('/users', require('./routes/user/user.js'));
 app.use('/users/auth', require('./routes/oauth/index'));
 app.use('/users/friends', require('./routes/friends/index'));
 app.use('/users/groups', require('./routes/groups/index'));
+app.use('/users/message', require('./routes/message/index'));
 
 // routing the user to all pagee
 app.all('*', (req, res) => {
