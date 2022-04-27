@@ -45,6 +45,17 @@ const signInPage =  (req, res) => {
     res.render('frontend/login')
 };
 
+const activatePage = (req, res) => {
+    const userInfo = req.user;
+
+    // passing every all needed info into the activate
+    const firstName = req.user.firstName;
+    const lastName = req.user.lastName;
+    const email = req.user.email;
+
+    res.render('frontend/activate', { userInfo: userInfo, firstName, lastName, email });
+}
+
 const signUpPage = (req, res) => {
     res.render('frontend/signup');
 };
@@ -108,7 +119,7 @@ const signUpFunction = (req, res) => {
                     // then create an email function to ther user
 
                     req.flash("success_msg", "Congratulations!!! Account Created Successfully");
-                    res.redirect("/signin");
+                    res.redirect("/users/signin");
 
                 }).catch(err => console.log(err));
             });
@@ -216,7 +227,7 @@ const logoutFunciton = (req, res) => {
 const dashboard = (req, res) => {
 
     const user = req.user
-    console.log(user)
+    
     const userName = req.user.userName
     const image = req.user.profileImg;
     const fullName = req.user.firstName+' '+req.user.lastName
@@ -384,12 +395,85 @@ const profileImage = (req, res) => {
                 
                 req.flash("success_msg", "Profile Picture Successfully Updated");
                 res.redirect('/users/profile')
-                
+                return;
             }
 
           }
         }
     });
+
+}
+
+const completeRegistration = async (req, res) => {
+
+    // validating the user session
+    // put some codeblock here
+
+     // getting the user inputs using post request 
+     const { 
+        userName,
+        password,
+        dob
+    } = req.body;
+
+    // check if any of it is empty
+    if(!userName || !password || !dob) {
+        req.flash("error", "Please fill important fields");
+        res.redirect('/users/activate');
+        return;
+    }
+
+    // ensuring user password is more than 6 characters
+    if(password.length < 6) {
+        res.flash("error", "Password must be at least 6 Characters");
+        res.redirect('/users/activate');
+        return;
+    }
+
+    // user id
+    const uId = req.user.id;
+
+    try {
+
+        // hashing password
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        // check to see if the username has ben chosen
+        const _check = await Users.find({ userName: userName });
+
+        console.log(_check);
+
+        if(!_check) {
+
+            // Insert into the database
+            req.flash("error", "Sorry, UserName has been Choosen");
+            res.redirect(`/users/activate`)
+             return;
+        }else {
+    
+       // updating the remaining info to complete registration database
+        const _users = await Users.findByIdAndUpdate({ _id: uId }, {
+            $set: {
+                userName: userName,
+                dob: dob,
+                isStatus: true,
+                password: hashPassword
+            }
+        });
+
+        if(_users) {
+            res.redirect('/users/dashboard')
+        }else {
+            res.redirect('/error/500');
+        }
+        
+
+        }
+    }catch(error) {
+        res.redirect('/error/500');
+        console.log(error);
+    } 
 
 }
 
@@ -406,5 +490,7 @@ module.exports = {
     friends,
     profile,
     updateProfile,
-    profileImage
+    profileImage,
+    activatePage,
+    completeRegistration
   }
