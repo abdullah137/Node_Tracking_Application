@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{> user/head}}
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+		{{> user/nav}}
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+		
+		
+		<!--**********************************
+            Header start
+        ***********************************-->
+        {{> user/header}}
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        {{> user/sidebar}}
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+		
+		<!--**********************************
+            Content body start
+        ***********************************-->
+		<div class="content-body">
+            <!-- row -->
+			<div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Wanna meet up with groups</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <form method="POST" action="groups/add" class="form-valide-with-icon needs-validation" novalidate>
+                                        <div class="mb-3">
+                                            <label class="text-label form-label" for="validationCustomUsername">Group Name</label>
+                                            <div class="input-group">
+												<span class="input-group-text"> <i class="fa fa-users"></i> </span>
+                                                <input name="name" type="text" class="form-control" id="validationCustomUsername" placeholder="Enter a group name" required>
+												<div class="invalid-feedback">
+													Please Enter group name.
+												  </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="text-label form-label" for="validationCustomUsername">Group Image</label>
+                                            <div class="input-group">
+												<span class="input-group-text"> <i class="fa fa-image"></i> </span>
+                                                <input name="image" type="file" class="form-control" placeholder="Choose your image">
+												<div class="invalid-feedback">
+													Please Enter group name.
+												  </div>
+                                            </div>
+                                        </div>
+
+                                         <div class="mb-3">
+                                            <label class="text-label form-label" for="validationCustomUsername">Group Description</label>
+                                            <div class="input-group">
+												<span class="input-group-text"> <i class="fa fa-book"></i> </span>
+                                                <textarea name="description" height="300" rows="10" class="form-control" placeholder="Enter your group description"></textarea>
+												<div class="invalid-feedback">
+													Please Enter group description
+												  </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" class="btn btn-block me-2 btn-success"> <i class="fa fa-plus"></i> Choose your friends </button>
+
+
+                                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalCenter">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">List of friends</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{!-- <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p> --}}
+                                                
+                                                     <table class="table table-responsive-md">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:50px;">
+													<div class="custom-control custom-checkbox checkbox-success check-lg me-3">
+														<input type="checkbox" class="custom-control-input" id="checkAll" required="">
+														<label class="custom-control-label" for="checkAll"></label>
+													</div>
+												</th>
+                                                <th><strong>Name</strong></th>
+                                                <th><strong>Email</strong></th>
+                                                <th><strong>Username</strong></th>
+                                                <th><strong>Status</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#if users}}
+							                	{{#each users}}
+                                            <tr>
+                                                <td>
+													<div class="custom-control custom-checkbox checkbox-success check-lg me-3">
+														<input type="checkbox" class="custom-control-input" id="customCheckBox2" required="">
+														<label class="custom-control-label" for="customCheckBox2"></label>
+													</div>
+												</td>
+                                                <td><div class="d-flex align-items-center"><img src="{{ profile profileImg }}" class="rounded-lg me-2" width="24" alt=""/> <span class="w-space-no">{{{firstName}}} {{lastName}}</span></div></td>
+                                                <td><a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="fe9b869f938e929bbe9b869f938e929bd09d9193">[email&#160;protected]</a>	</td>
+                                                <td>{{{userName}}}</td>
+                                                <td><div class="d-flex align-items-center">
+                                                {{{statusList friends.0.awaitList friends.0.acceptList friends.0.declineList ../userId }}}
+                                                
+                                                  </div></td>
+                                            </tr>
+                                            	{{/each}}
+					                    {{/if}}
+                                        </tbody>
+                                    </table>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Create a group</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">List of Groups</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                     {{> user/messages}}
+                                  
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+				 </div>
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {{> user/footer}}
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+		<!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    {{> user/script}}
+	</body>
+
+<!-- Mirrored from davur.dexignzone.com/dashboard/page-order.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 11 Mar 2022 17:31:36 GMT -->
+</html>
