@@ -58,10 +58,14 @@ const UserSchema = new mongoose.Schema({
     lastLogin: {
         type: Date,
         default: Date.now
-     }
+     },
 
-
-
+    isStatus: {
+        type: Boolean,
+        enum: [ true, false ],
+        default: false
+    }
+    
 });
 
 module.exports = mongoose.model('User', UserSchema);
