@@ -14,12 +14,16 @@ const {
     friends,
     profile, 
     updateProfile,
-    profileImage
+    profileImage,
+    activatePage,
+    completeRegistration
 } = require('../../controllers/user/user'); 
 
 const { ensureAuthenticated, forwardAuthenticated }  = require("../../middleware/auth");
 
 router.get('/signin', signInPage);
+
+router.get('/activate', activatePage);
 
 router.get('/signup', signUpPage);
 
@@ -42,5 +46,7 @@ router.get('/profile', profile);
 router.put('/update-profile', updateProfile);
 
 router.post('/image', profileImage);
+
+router.post('/complete',  completeRegistration);
 
 module.exports = router;
