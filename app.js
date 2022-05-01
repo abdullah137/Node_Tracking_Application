@@ -93,12 +93,10 @@ app.use(passport.session());
 app.use(function(req, res, next) {
     res.locals.user = req.user || null
     next()
-})
-
+});
 
 // Connecting flash
 app.use(flash());
-
 
 // Setting global variables for the flash
 app.use(function(req, res, next) {
@@ -130,7 +128,7 @@ io.on('connection', socket => {
     socket.on('joinUser', (object) => {
        
         const user = userOnline(socket.id, object.sessionId, object.roomId);
-
+       
         socket.join(user.room)
 
         // console.log("It is connected here", socket);
@@ -138,18 +136,13 @@ io.on('connection', socket => {
 
          // Broadcast when a user connects // then put time login here
          socket.broadcast.to(user.room).emit('message', formatMessage('Application', `${object.userId} user has joined the chat`));
-                
-        // send users and room info
-        io.to(user.room).emit('roomUsers', {
-        
-        });
 
     });
 
     // Listen for Chatmessage
     socket.on('chatMessage', ({sessionId, msg}) => {
         const user = getCurrentUser(socket.id);
-        io.emit('message', object_With_resume('USER', sessionId,  msg))
+        io.to(user.room).emit('message', object_With_resume('USER', sessionId,  msg))
     });
 
     // Runs when client disconnects
@@ -157,7 +150,7 @@ io.on('connection', socket => {
 
         const user = getCurrentUser(socket.id);
 
-        console.log(user);
+        // console.log(user);
 
         io.emit('message', formatMessage('Application', 'A user has left the chat'))
     });
