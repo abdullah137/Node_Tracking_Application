@@ -21,10 +21,10 @@ module.exports = {
     },
 
     statusIcon: function(awaitList = [], acceptList=[], declineList=[], userId, id ) {
-
+      
         if(awaitList.indexOf(userId) >= 0 ) {
             return `
-            <a href="friends/decline/${id}" class="btn btn-danger shadow btn-xs sharp me-1"><i class="fas fa-times"></i></a>
+            <a href="friends/cancel/${id}" class="btn btn-danger shadow btn-xs sharp me-1"><i class="fas fa-times"></i></a>
             <a href="friends/accept/${id}" class="btn btn-success shadow btn-xs sharp me-1"><i class="fas fa-check"></i></a>
             `
         }else if(acceptList.indexOf(userId) >= 0) {

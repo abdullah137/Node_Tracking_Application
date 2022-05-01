@@ -6,9 +6,10 @@ const userId = document.querySelector(".user_id").value
 const roomId = document.querySelector('.room_id').value
 const socket = io();
 
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-}
+// calliing our function to get chat
+getChat(roomId);
+
+console.log(sessionId, userId, roomId);
 
 const joinUser = { 
     sessionId,
@@ -44,16 +45,17 @@ chatForm.addEventListener('submit', (e) => {
 
     // sending the messages in ajax
     $.ajax({
-        url: '/user/message',
+        url: '/users/message/private/send',
         method: 'POST',
         dataType: 'json',
         data: {
+            room: roomId,
             sender: sessionId,
             sendee: userId,
             message: msg
         },
         success: function(response) {
-            if(response.msg === "ok") {
+            if(response.msg === "success") {
                 alert("It has been added already");
             }else {
                 alert("It has not been added alreay");
@@ -116,13 +118,28 @@ function showMessage(session_Id, message) {
         document.querySelector('.msg_card_body').appendChild(content_start)
 
         }
-        
-
 
     }
 
 
+    // funtion to get all chat from the db
+    function getChat(roomId) {
+        
+        $.ajax({
+            url: `/users/message/private/get/${roomId}`,
+            method: 'GET',
+            datatype: 'json',
+            success:function(response) {
+                if(response.msg=='success') {
+                    
+                    console.log('it is here')
+                    console.log($.each(response.data))
+                }
+            },
+            error: function(response) {
 
-
+            }
+        })
+    } 
 
 });
