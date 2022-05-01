@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 // importing the database model
 const Users = require('../../models/User');
 const Friends = require('../../models/Friends');
 const Notifications = require('../../models/Notification');
+const Rooms = require('../../models/Room');
 
 const friends = async (req, res) => {
 
@@ -30,7 +32,7 @@ const requests = async (req, res) => {
      // check if the param is empty
      if(!targetId) {
         // render them to the page 404
-        res.status(404).render('/error/404')
+        res.status(400).render('/error/400')
     }
     
     try {
@@ -43,7 +45,7 @@ const requests = async (req, res) => {
 
     if(!userCheck) {
         // render the person to error page
-        res.status(400).render('/error/400');   
+        res.status(404).render('/error/404');   
     }
 
     if(!sessionCheck) {
@@ -76,7 +78,7 @@ const requests = async (req, res) => {
                 "friends.0.awaitList": req.params.id
             }
         });
-
+    
     // saving the notifications    
     const saveNotification = await Notifications.create({ 
         senderId: new mongoose.Types.ObjectId(loggedUser),
@@ -84,9 +86,16 @@ const requests = async (req, res) => {
         type: 'frd_add'
     });
 
-    // Settting flash messages
-    req.flash("friend_msg_success", "Your friend request has been sent successfully");
-    res.redirect(`/users/friends`)
+    if(saveNotification && receiverList && initiatorList) {
+        
+        // Settting flash messages
+        req.flash("friend_msg_success", "Your friend request has been sent successfully");
+        res.redirect(`/users/friends`)
+
+    } else {
+        res.redirect('/error/500');    
+    }
+
 
     } 
         
@@ -97,7 +106,7 @@ const requests = async (req, res) => {
 
 };
 
-const decline = async(req, res) => {
+const remove = async(req, res) => {
 
     // declaring the needed variables
     const sessionId = req.user.id
@@ -260,15 +269,16 @@ const accept = async(req, res) => {
                  }
          );
 
-        console.log(updateFriendStatus)
+       // Creating rooms for both users
+       const Room = await Rooms.create({ rId: uuidv4(), rType: 'Private', rList: [sessionId, targetId ]}); 
 
-        if(!acceptFriendRequest || !acceptFriendRequestReceiver || !saveNotification) {
+        if(!acceptFriendRequest || !acceptFriendRequestReceiver || !saveNotification || !Room) {
             // rendering them to 500
             res.status(500).render('/error/500');
         }else {
             
             // Insert into the database
-            req.flash("friend_msg_decline", "Your friend request has been declined 😓");
+            req.flash("success", "Your friend request has been acceoted 👍 ");
             res.redirect(`/users/friends`)
         }
 
@@ -306,4 +316,60 @@ const search = async(req, res) => {
     res.render('user/account-search-friends', {image, userName, users, userId, success});
 }
 
-module.exports = { friends, accept, requests, decline, search }
+const cancel = async(req, res) => {
+    
+    // intializing the varaibles needed
+    const _l = req.user.id
+    const _t = req.params.id
+
+    // check if the params is empty
+    if(!_t) {
+        // render them to the page 404
+        res.status(400).render('/error/400')
+    }
+
+    try{
+
+        // checking if the user exist
+         const _u = await Users.findById(_t).exec();
+         if(!_u) {
+              // render the person to error page
+              res.status(404).render('/error/404');   
+         }
+
+         const _s = await Users.findById(_l).exec();
+         if(!_s) {
+            // render the person the error page
+            res.status(400).render('/error/400');
+        }
+
+        // removing the users at it was before
+        const _u1 = await Users.findByIdAndUpdate({ _id: _t }, {
+            $pull: {
+                "friends.0.awaitList": _l
+            }
+        });
+
+        const _u2 = await Users.findByIdAndUpdate({ _id: _l }, {
+            $pull: {
+                "friends.0.awaitList": _t
+            }
+        });
+
+        if( !_u1 || !_u2 ) {
+            // rendering them to 500
+            res.status(500).render('/error/500');
+        }else {
+
+             // Redirecting the users
+             req.flash("friend_msg_decline", "Your friend request has been canceled ⏰ ");
+             res.redirect(`/users/friends`)
+        }
+
+    }catch(error) {
+        console.error(error);
+        res.redirect('/error/500');
+    }
+}
+
+module.exports = { friends, accept, requests, remove, search , cancel}
