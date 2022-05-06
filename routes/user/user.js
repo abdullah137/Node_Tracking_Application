@@ -16,7 +16,8 @@ const {
     updateProfile,
     profileImage,
     activatePage,
-    completeRegistration
+    completeRegistration,
+    checkRegistration
 } = require('../../controllers/user/user'); 
 
 const { ensureAuthenticated, forwardAuthenticated }  = require("../../middleware/auth");
@@ -48,5 +49,7 @@ router.put('/update-profile', updateProfile);
 router.post('/image', profileImage);
 
 router.post('/complete',  completeRegistration);
+
+router.get('/check/:id', checkRegistration);
 
 module.exports = router;
