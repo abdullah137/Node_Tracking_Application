@@ -74,7 +74,7 @@
 					</div>
 				</div>
                 <div class="row">
-                    <div class="col-xl-3">
+                    <div class="col-xl-4 col-sm-4 col-xs-4 col-xxl-4 col-lg-4 col-md-4">
 
                         <div class="chatbox">
 
@@ -115,24 +115,25 @@
 
                     </div>
 					
-					<div class="col-xl-9 col-xxl-9 col-lg-9 col-md-9">
+					<div class="col-xl-8 col-sm-8 col-xs-8 col-xxl-8 col-lg-8 col-md-8">
 						<div class="row">
 							<div class="col-xl-12">
 									<div class="chatbox active">
 
-										<div class="card-body msg_card_body">
-
+										<div class="card-body msg_card_body" style="display: block; ">
 											
 
 								
 								
 									<form id="chatForm">
-								<div style="border: 1px solid black; position: relative; flex: 1; top: 600px; width: 100%;" class="card-footer type_msg">
+								<div style="border: 1px solid black;
+                                width: 100%; display: block;" class="card-footer type_msg">
 								<div class="input-group">
 									<input type="hidden" class="room_id" name="room_id" value="{{_rId}}" />
                                     <input type="hidden" class="session_id" name="session_id" value="{{_u1}}" />
                                     <input type="hidden" class="user_id" name="user_id" value="{{_u2}}" />
-									<textarea id="message" class="form-control" placeholder="Type your message..."></textarea>
+									<input type="hidden" id="user_img" name="user_img" value="{{_uImg}}" />
+                                    <textarea id="message" class="form-control" placeholder="Type your message..."></textarea>
 									<div class="input-group-append">
 										<button class="btn btn-primary"><i class="fa fa-location-arrow"></i></button>
 									</div>
