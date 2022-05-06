@@ -5,6 +5,10 @@ const statusSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    url: {
+        type: String,
+        required: true
+    },
     status: {
         type: Number,
         enum: [ 0, 1 ]
