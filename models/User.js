@@ -64,6 +64,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         enum: [ true, false ],
         default: false
+    },
+    methodRegistration: {
+        type: String,
+        enum: ['Oauth', 'Manual'],
+        required: true
     }
     
 });
