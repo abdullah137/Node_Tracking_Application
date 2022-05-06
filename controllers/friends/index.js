@@ -372,4 +372,27 @@ const cancel = async(req, res) => {
     }
 }
 
-module.exports = { friends, accept, requests, remove, search , cancel}
+const profile = async (req, res) => {
+    // getting params
+    const profileId = req.params.id
+
+    // checking for this right now
+    try {
+        const getUsersInfo = await Users.findOne({ _id: req.params.id });
+
+        if(!getUsersInfo) {
+            res.status(400).redirect('/error/404');
+            return;
+        }
+
+        
+        // render the person to the other page
+        
+    }catch(error) {
+        res.redirect('/error/500')
+        console.log(error)
+    }
+    console.log(req.params.id, "It is here");
+}
+
+module.exports = { friends, accept, requests, remove, search, cancel, profile}
