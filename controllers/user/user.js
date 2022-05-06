@@ -2,10 +2,18 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const passport = require('passport');
 const path = require('path');
+const mongoose = require('mongoose');
 
 // importing the database model
 const Users = require('../../models/User');
 const Otp = require('../../models/Otp');
+const Status = require('../../models/Status');
+
+// importing our mails functions
+const { registration } = require('../../mails/index')
+
+// importing an helper
+const { generateRandomStrings } = require('../../helpers/strings');
 
 // Multer Configuration
 const storage = multer.diskStorage({
@@ -105,25 +113,44 @@ const signUpFunction = (req, res) => {
       } else {
 
           // Setting the user object to be updated
-        const newUser = new Users({
-            userName, firstName, lastName, phone, email, password, dob
-        });
+          const methodRegistration = 'Manual'
+
+            const newUser = new Users({
+                userName, firstName, lastName, phone, email, password, dob, methodRegistration
+            });
+
+        const _randomStrings = generateRandomStrings(7);
 
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(newUser.password, salt, (err, hash) => {
                 if(err) throw err;
                 newUser.password = hash;
+                newUser.isStatus = false;
                 newUser.save()
                 .then(user => {
 
-                    // then create an email function to ther user
+                                      // Creating the status for activation
+                            const userId =  new mongoose.Types.ObjectId(newUser._id)
+                            const status = 0
 
+                            const url = _randomStrings
+
+                            const codes = new Status({ userId, url, status });
+
+                            codes.save();
+
+
+                    const fullName = firstName + ' '+lastName
+                    // sending email to users
+                    registration(fullName, email, _randomStrings);
+                    
                     req.flash("success_msg", "Congratulations!!! Account Created Successfully");
                     res.redirect("/users/signin");
 
                 }).catch(err => console.log(err));
             });
-        })
+        });
+
       }  
     })
         
@@ -131,13 +158,36 @@ const signUpFunction = (req, res) => {
 
 }
 
-const signInFunction = (req, res, next) => {
+const signInFunction = async(req, res, next) => {
 
-    passport.authenticate('local', {
-        successRedirect: '/users/dashboard',
-        failureRedirect: '/users/signin',
-        failureFlash: true
-    })(req, res, next);
+    // get request object from users
+    const { email, password } = req.body;
+    
+    // checking if the account is activated
+    const checkUser = await Users.findOne({ email: email })
+
+    if(checkUser) {
+
+        const status = checkUser.isStatus;
+        const registrationMethod = checkUser.methodRegistration
+
+        if(status == false && registrationMethod == "Manual") {
+            
+            req.flash("error", "Sorry, An email Has been sent to your account.");
+            res.redirect('/users/signin');
+            return;
+        }
+
+        passport.authenticate('local', {
+            successRedirect: '/users/dashboard',
+            failureRedirect: '/users/signin',
+            failureFlash: true
+        })(req, res, next);
+
+        
+    }
+
+  
 
 };
 
@@ -172,19 +222,7 @@ const resetPasswordFunction = (req, res) => {
         }else {
 
 
-            // Function that generated strings
-            function generateUrl(length) {
-                var result           = '';
-                var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                var charactersLength = characters.length;
-                for ( var i = 0; i < length; i++ ) {
-                  result += characters.charAt(Math.floor(Math.random() * 
-             charactersLength));
-               }
-               return result;
-            }
-
-            let ranChar = generateUrl(10);
+           
 
             // Generate a random string
             let url = req.url+'/change-password?'+ranChar;
@@ -477,6 +515,57 @@ const completeRegistration = async (req, res) => {
 
 }
 
+const checkRegistration = async(req, res, next) => {
+    // gettting the id parsed from the parameter
+    const _idParams = req.params.id;
+
+    try {
+
+        // check if the id exists
+    const _c = await Status.findOne({ url: _idParams }).select('userId');
+    
+    if(!_c) {
+        res.status(400).redirect('/error/500');
+        return;
+    }
+
+    // check if the user exist
+    const _u = await Users.findById(_c.userId);
+    const email = _u.email
+    
+    req.user =_u
+   
+
+    if(_u) {
+
+        // Updating the user information
+        const _updateInfo = await Users.findByIdAndUpdate(_c.userId, { isStatus: true });
+
+        if(_updateInfo) {
+            
+            // also updating the status of the code is itself
+            const _s = await Status.findByIdAndUpdate(_c.id, { status: 1 });
+      
+            if(_s) {
+            
+          
+                passport.authenticate('local', {
+                successRedirect: '/users/dashboard',
+                failureRedirect: '/users/signin',
+                failureFlash: true
+                })(req, res, next);
+                
+            }
+        }
+    }
+    
+    }catch (error) {
+        console.log(error)
+        res.redirect('/errors/500')
+    }
+
+}
+
 // Exporting the modules
 module.exports = {
     signInPage,
@@ -492,5 +581,6 @@ module.exports = {
     updateProfile,
     profileImage,
     activatePage,
-    completeRegistration
+    completeRegistration,
+    checkRegistration
   }
