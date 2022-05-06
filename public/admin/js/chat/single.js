@@ -4,12 +4,17 @@ const chatForm = document.getElementById("chatForm");
 const sessionId = document.querySelector(".session_id").value
 const userId = document.querySelector(".user_id").value
 const roomId = document.querySelector('.room_id').value
+const userImg = document.querySelector('.profile').getAttribute('src')
+const _sImg = document.querySelector('#user_img').value
+
+// user image path
+const path = '../../uploads/'+_sImg
+
 const socket = io();
+console.log(path)
 
 // calliing our function to get chat
-getChat(roomId);
-
-console.log(sessionId, userId, roomId);
+getChat(roomId, sessionId);
 
 const joinUser = { 
     sessionId,
@@ -56,9 +61,9 @@ chatForm.addEventListener('submit', (e) => {
         },
         success: function(response) {
             if(response.msg === "success") {
-                alert("It has been added already");
+                // getChat(roomId, sessionId); 
             }else {
-                alert("It has not been added alreay");
+                getChat(roomId, sessionId);
             }
         },
         error: function(response) {
@@ -85,7 +90,7 @@ function showMessage(session_Id, message) {
         content_start.innerHTML = `
 
         <div class="img_cont_msg">
-            <img src="../../admin/images/avatar/1.jpg" class="rounded-circle user_img_msg" alt=""/>
+            <img src=${path} class="rounded-circle user_img_msg" alt=""/>
         </div>
         <div class="msg_cotainer">
            ${message.text}
@@ -110,7 +115,7 @@ function showMessage(session_Id, message) {
             <span class="msg_time_send">${message.time}, Today</span>
         </div>
         <div class="img_cont_msg">
-    <img src="../../admin/images/avatar/2.jpg" class="rounded-circle user_img_msg" alt=""/>
+    <img src=${userImg} class="rounded-circle user_img_msg" alt=""/>
         </div>
     
         `;
@@ -123,17 +128,30 @@ function showMessage(session_Id, message) {
 
 
     // funtion to get all chat from the db
-    function getChat(roomId) {
-        
+    function getChat(roomId, sessionId) {
+
         $.ajax({
             url: `/users/message/private/get/${roomId}`,
             method: 'GET',
             datatype: 'json',
             success:function(response) {
-                if(response.msg=='success') {
-                    
-                    console.log('it is here')
-                    console.log($.each(response.data))
+                if(response.msg=='SUCCESS') {
+                    console.log(response.data)
+                   
+                    $.each(response.data, function(index, data) {
+                        
+                        var _messageText = data.messageText
+                        var _messageTime = data.messageTime
+                        var usersId = data.senderId
+
+                        // constructing object to be rendered
+                        const object = {
+                            text: _messageText,
+                            time: _messageTime
+                        }
+
+                        showMessage(usersId, object)
+                    })
                 }
             },
             error: function(response) {
