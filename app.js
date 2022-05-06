@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo");
 const {engine} = require('express-handlebars');
 const methodOverride = require('method-override');
 
-const {formatMessage, object_With_resume} = require('./utils/messages');
+const {formatMessage, object_With_resume} = require('./utils/messages');    
 const { userOnline, getCurrentUser, userOffline, getRoomUsers } = require('./utils/user');
 
 // Load config variable
@@ -132,7 +132,7 @@ io.on('connection', socket => {
         socket.join(user.room)
 
         // console.log("It is connected here", socket);
-        socket.emit('message', formatMessage('Application', 'Welcome to chatcord'))
+       // socket.emit('message', formatMessage('Application', 'Welcome to chatcord'))
 
          // Broadcast when a user connects // then put time login here
          socket.broadcast.to(user.room).emit('message', formatMessage('Application', `${object.userId} user has joined the chat`));
@@ -143,6 +143,16 @@ io.on('connection', socket => {
     socket.on('chatMessage', ({sessionId, msg}) => {
         const user = getCurrentUser(socket.id);
         io.to(user.room).emit('message', object_With_resume('USER', sessionId,  msg))
+
+        // broadcast when a user connects
+        // connect to all users except the current user
+        // socket.broadcast.to(user.room).emit('online', object_With_resume('USER', `${sessionId} has joined the chat`))
+
+        // // send user and and room
+        // io.to(user.room).emit('onlineUsers', {
+        //     room: user.room,
+        //     users: getRoomUsers(user.room)
+        // });
     });
 
     // Runs when client disconnects
@@ -152,7 +162,7 @@ io.on('connection', socket => {
 
         // console.log(user);
 
-        io.emit('message', formatMessage('Application', 'A user has left the chat'))
+       // io.to(user.room).emit('message', formatMessage('Application', 'A user has left the chat'))
     });
 })
 
