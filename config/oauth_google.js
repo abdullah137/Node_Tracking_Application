@@ -27,7 +27,8 @@ module.exports = function(passport) {
             email: profile.emails[0].value,
             password: hashPassword,
             dob: "0000-00-00",
-            profileImg : ''
+            profileImg : '',
+            methodRegistration: 'Oauth'
         }
 
         // Check into the Databse if record is already there
