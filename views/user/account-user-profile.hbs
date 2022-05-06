@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{> user/head}}
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+		{{> user/nav}}
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+		
+		
+		<!--**********************************
+            Header start
+        ***********************************-->
+        {{> user/header}}
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        {{> user/sidebar}}
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+		{{> user/svg}}
+		<!--**********************************
+            Content body start
+        ***********************************-->
+		
+          <div class="content-body">
+            <div class="container-fluid">
+				<div class="row page-titles">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item active"><a href="javascript:void(0)">App</a></li>
+						<li class="breadcrumb-item"><a href="javascript:void(0)">Profile</a></li>
+					</ol>
+                </div>
+                <!-- row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="profile card card-body px-3 pt-3 pb-0">
+                            <div class="profile-head">
+                                <div class="photo-content">
+                                    <div class="cover-photo rounded"></div>
+                                </div>
+                                <div class="profile-info">
+									<div class="profile-photo">
+										<img src="{{{ profile image }}}" class="img-fluid rounded-circle" alt="">
+									</div>
+									<div class="profile-details">
+										<div class="profile-name px-3 pt-2">
+											<h4 class="text-primary mb-0">{{firstName}} {{lastName}} </h4>
+											<p>{{userName}}</p>
+										</div>
+										<div class="profile-email px-2 pt-2">
+											<h4 class="text-muted mb-0"><a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="f39a9d959cb3968b929e839f96dd909c9e">[email&#160;protected]</a></h4>
+											<p>{{email}}</p>
+										</div>
+										<div class="dropdown ms-auto">
+											<a href="#" class="btn btn-primary light sharp" data-bs-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></a>
+											<ul class="dropdown-menu dropdown-menu-end">
+												<li class="dropdown-item"><i class="fa fa-user-circle text-primary me-2"></i> View profile</li>
+												<li class="dropdown-item"><i class="fa fa-users text-primary me-2"></i> Add to btn-close friends</li>
+												<li class="dropdown-item"><i class="fa fa-plus text-primary me-2"></i> Add to group</li>
+												<li class="dropdown-item"><i class="fa fa-ban text-primary me-2"></i> Block</li>
+											</ul>
+										</div>
+									</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4">
+						<div class="row">
+							<div class="col-xl-12">
+								<div class="card">
+									<div class="card-body">
+										<div class="profile-statistics">
+											<div class="text-center">
+												<div class="row">
+                                                    <form method="POST" action="image" enctype="multipart/form-data">
+													<div class="input-group mb-3">
+														<span class="input-group-text">Upload</span>
+															<div class="form-file">
+																<input type="file" name="upload" class="form-file-input form-control">
+															</div>
+														</div>
+
+                                                        <div class="mt-4">
+                                                            <button class="btn btn-primary mb-1" > <i class="fas fa-image"></i> Upload Image</button>
+                                                        </div>
+
+                                                    </form>
+												</div>
+											</div>
+                                            
+                                                {{#if success_msg}}
+                                                    <div class="mx-auto">
+                                                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                                                    <div>
+                                                        &nbsp;&nbsp;{{success_msg}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    {{/if}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="profile-tab">
+                                    <div class="custom-tab-1">
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item"><a href="#profile-settings" data-bs-toggle="tab" class="nav-link active show">Edit Profile</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                           
+                                            <div id="profile-settings" class="tab-pane fade active show">
+                                                <div class="pt-3">
+                                                    <div class="settings-form">
+                                                        <h4 class="text-primary">Set your profile</h4> <br />
+                                                        {{> user/messages}}
+                                                        {{#if profile}}
+                                                        <form action="update-profile" method="POST">
+                                                            <input type="hidden" name="_method" value="PUT">
+                                                            <div class="row">
+                                                                <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">First Name*</label>
+                                                                    <input type="text" placeholder="First Name" name="firstName" value="{{firstName}}" class="form-control">
+                                                                </div>
+                                                                <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">Last Name*</label>
+                                                                    <input type="text" placeholder="Last Name" name="lastName" value="{{lastName}}" class="form-control">
+                                                                </div>
+                                                                 <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">Phone*</label>
+                                                                    <input type="text" placeholder="Phone" name="phone" value="{{phone}}" class="form-control">
+                                                                </div>
+                                                                <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">Date of Birth*</label>
+                                                                    <input type="date" value="{{dob}}" name="dob" class="form-control">
+                                                                </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Username</label>
+                                                                <input type="text" value="{{userName}}" style="background-color: #E9ECEF; color: #93757D;" class="form-control" readonly disabled>
+                                                            </div>
+                                                            
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Email*</label>
+                                                                <input type="text" name="email" value="{{email}}" class="form-control" >
+                                                            </div>
+
+                                                            <div class="row">
+                                                               
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label">Password</label>
+                                                                <input type="password" placeholder="Enter Password" name="password" class="form-control">
+                                                            </div>
+                                                             <div class="mb-3 col-md-6">
+                                                                    <label class="form-label">Confirm Password</label>
+                                                                    <input type="password" placeholder="Confirm Your Password" name="c_password" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <small><b>Kindly Leave the Password Blank,</b> If you intend not to change the it.</small>
+                                                            <br />
+                                                            <button class="btn btn-primary" type="submit"> <i class="fa fa-user-circle-o"></i> Update Profile
+                                                            </button>
+                                                        </form>
+                                                        {{/if}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									<!-- Modal -->
+									<div class="modal fade" id="replyModal">
+										<div class="modal-dialog modal-dialog-centered" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Post Reply</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+												</div>
+												<div class="modal-body">
+													<form>
+														<textarea class="form-control" rows="4">Message</textarea>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">btn-close</button>
+													<button type="button" class="btn btn-primary">Reply</button>
+												</div>
+											</div>
+										</div>
+									</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+			
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {{> user/footer}}
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+		<!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    {{> user/script}}
+	</body>
+
+<!-- Mirrored from davur.dexignzone.com/dashboard/page-order.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 11 Mar 2022 17:31:36 GMT -->
+</html>
