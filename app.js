@@ -11,6 +11,7 @@ const MongoStore = require("connect-mongo");
 const {engine} = require('express-handlebars');
 const methodOverride = require('method-override');
 
+// Importing some utilities needed
 const {formatMessage, object_With_resume} = require('./utils/messages');    
 const { userOnline, getCurrentUser, userOffline, getRoomUsers } = require('./utils/user');
 
@@ -52,11 +53,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars Helpers
 const { json, ifEquals, statusList, statusIcon, profile } = require('./helpers/hbs');
-const { type } = require('os');
+const { logins } = require('./helpers/date');
 
 // Setting Our Engine
 app.engine('.hbs', engine({
-     helpers: { json, ifEquals, statusList, statusIcon, profile },
+     helpers: { json, ifEquals, statusList, statusIcon, profile, logins },
      extname:'.hbs',
      defaultLayout: false
 }));
@@ -66,7 +67,7 @@ app.set('view engine', '.hbs');
 // Session configuration
 app.use(
     session({
-        secret: 'Abdullah',
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
         store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
@@ -116,10 +117,12 @@ app.use('/users/auth', require('./routes/oauth/index'));
 app.use('/users/friends', require('./routes/friends/index'));
 app.use('/users/groups', require('./routes/groups/index'));
 app.use('/users/message', require('./routes/message/index'));
+app.use('/users/track', require('./routes/track/index'));
 
-// routing the user to all pagee
+// routing the user to all page if page is not found
 app.all('*', (req, res) => {
-    res.status(404).render('errors/error');
+    res.status(404).redirect('/errors/404');
+    return;
 });
 
 // socket io is here
