@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
+const objectId = require('mongoose').Types.ObjectId;
 
 // importing the database model
 const Users = require('../../models/User');
@@ -373,26 +374,36 @@ const cancel = async(req, res) => {
 }
 
 const profile = async (req, res) => {
+
     // getting params
     const profileId = req.params.id
 
-    // checking for this right now
-    try {
-        const getUsersInfo = await Users.findOne({ _id: req.params.id });
+    // check if it's a valid id
+    if(!objectId.isValid(profileId)) {
+        res.status(400).redirect('/error/400');
+        return; 
+    }
 
-        if(!getUsersInfo) {
-            res.status(400).redirect('/error/404');
+    // checking if this exists
+    try {
+        const userInfo = await Users.find({ _id: profileId }).lean();
+
+        if(!userInfo) {
+            res.status(404).redirect('/error/404');
             return;
         }
 
+        // getting list of friends
+        const users = await Users.find({ "friends.0.acceptList": profileId }).lean();
         
         // render the person to the other page
+        res.render('user/account-user-profile', { userInfo,users });
         
     }catch(error) {
-        res.redirect('/error/500')
+        res.status(500).redirect('/error/500')
         console.log(error)
+        return;
     }
-    console.log(req.params.id, "It is here");
 }
 
 module.exports = { friends, accept, requests, remove, search, cancel, profile}
